@@ -10,10 +10,11 @@ class Hosts(models.Model):
     last_name = models.CharField(max_length = 8, verbose_name = "姓氏")
     birth_date = models.DateField(verbose_name = "出生年月日")
     email = models.EmailField(max_length = 255, verbose_name = "電子信箱")
-    phonenumber = models.IntegerField(max_length = 10, verbose_name = "手機號碼")
+    phonenumber = models.CharField(max_length = 10, verbose_name = "聯絡號碼")
     address = models.CharField(max_length = 80, verbose_name = "地址")
 
     class Meta:
+        verbose_name_plural = "寵物主人"        
         db_table = '主人資料'
 
 
@@ -40,67 +41,52 @@ class Pets(models.Model):
     )    
     
     name = models.CharField(max_length = 20, verbose_name = "姓名")
-    nickname = models.CharField(max_length = 10, null = True, blank = True, verbose_name = "暱稱")
-    category = models.IntegerField(max_length = 1, choices = CATEGORY_CHOICES, verbose_name = "種類")
+    nickname = models.CharField(max_length = 10, blank = True, verbose_name = "暱稱")
+    category = models.IntegerField(choices = CATEGORY_CHOICES, verbose_name = "種類")
     type = models.CharField(max_length = 22, verbose_name = "品種")
     gender = models.IntegerField(choices = GENDER_CHOICES, verbose_name = "性別")
     birth_date = models.DateField(verbose_name = "出生年月日")        
 
-    host = models.ForeignKey(Hosts, verbose_name = "主人的UID")
+    host = models.ForeignKey(Hosts, on_delete = models.CASCADE, verbose_name = "主人", related_name = 'my_host')
 
     class Meta:
+        verbose_name_plural = "寵物"        
         db_table = '寵物資料'
 
 
-class DailyRecords(models.Model):
+class PetRecords(models.Model):
     '''
     寵物日常紀錄表
     '''
-
+    # 身體狀況
     STATUS_CHOICES = (
         (1, '健康'),
-        (2, '不舒服'),
-        (3, '治療中')        
+        (2, '不舒服'),        
     )
 
-    date = models.DateField(default = datetime.date.today, verbose_name = "填表日期")      
-    number_of_excretion =  models.IntegerField(verbose_name = "當日排泄次數")
-    number_of_meals = models.IntegerField(verbose_name = "當日用餐次數")
-    weight = models.IntegerField(null = True, blank= True, verbose_name = "寵物體重")
-    status = models.TextField(choices = STATUS_CHOICES, verbose_name = "身體狀況")
-    notes = models.TextField(verbose_name = "日常記錄")
-
-    pet = models.ForeignKey(Pets, on_delete = models.CASCADE, verbose_name = "該紀錄寵物")
-    
-    class Meta:
-        class Meta:
-            db_table = '寵物日常紀錄表',
-            unique_together = ("date", "pet")
-
-
-class PetRecoveryRecords(models.Model):
-    '''
-    寵物治療後紀錄表
-    '''        
-
-    STATUS_CHOICES = (
-        (1, '症狀改善')
-        (2, '症狀無改變')
+    # 治療狀況
+    HEAL_STATUS_CHOICES = (
+        (1, '症狀改善'),
+        (2, '症狀無改變'),
         (3, '症狀加劇')
     )
 
-    date = models.DateField(default = datetime.date.today, verbose_name = "填表日期")  
-    number_of_excretion =  models.IntegerField(verbose_name = "當日排泄次數")
-    number_of_meals = models.IntegerField(verbose_name = "當日用餐次數")      
-    hospital_name = models.CharField(max_length = 22, verbose_name = "醫院/診所的名稱")
-    status = models.IntegerField(choices = STATUS_CHOICES, verbose_name = "治療後狀況")
-    diseases = models.CharField(max_length = 255, verbose_name = "症狀或病名")
-    notes = models.TextField(verbose_name = "注意事項")        
+    date = models.DateField(default = datetime.date.today, verbose_name = "填表日期")      
+    number_of_excretion =  models.IntegerField(null = True, blank = True, verbose_name = "當日排泄次數")
+    number_of_meals = models.IntegerField(null = True, blank = True, verbose_name = "當日用餐次數")
+    weight = models.IntegerField(null = True, blank= True, verbose_name = "寵物體重")
+    status = models.IntegerField(choices = STATUS_CHOICES, verbose_name = "身體狀況")            
+    
+    hospital_name = models.CharField(max_length = 22, blank = True, verbose_name = "醫院/診所的名稱")    
+    diseases = models.CharField(max_length = 255, blank = True, verbose_name = "症狀或病名")
+    heal_status = models.IntegerField(choices = HEAL_STATUS_CHOICES, blank = True, null = True, verbose_name = "治療後狀況")
+    notes = models.TextField(blank = True, verbose_name = "備註:")  
 
     pet = models.ForeignKey(Pets, on_delete = models.CASCADE, verbose_name = "該紀錄寵物")
-
-    class Meta:
-        db_table = '寵物日常紀錄表',
+    
+    class Meta:        
+        verbose_name_plural = "寵物紀錄"        
+        db_table = '寵物紀錄'
         unique_together = ("date", "pet")
 
 
@@ -113,15 +99,16 @@ class Assistants(models.Model):
     last_name = models.CharField(max_length = 8, verbose_name = "姓氏")
     birth_date = models.DateField(verbose_name = "出生年月日")
     email = models.EmailField(max_length = 255, verbose_name = "電子信箱")
-    phonenumber = models.IntegerField(max_length = 10, verbose_name = "手機號碼")
+    phonenumber = models.CharField(max_length = 10, verbose_name = "聯絡號碼")
     start_time = models.DateField(verbose_name = "開始日期")
     end_time = models.DateField(verbose_name = "結束日期")
     address = models.CharField(max_length = 80, verbose_name = "地址")
 
-    pet = models.ManyToManyField(Pets, through = "PetsAndAssistants", through_fields = ('pet', 'assistant'))
+    pet = models.ManyToManyField(Pets)
 
     class Meta:
-        db_table = '協助飼養者'
+        verbose_name_plural = "協助飼養寵物者"        
+        db_table = '協助飼養寵物者'
 
 
 class MessageBoard(models.Model):
@@ -131,17 +118,16 @@ class MessageBoard(models.Model):
     
     TOPIC_CHOICES = (
         (1, '閒聊'),
-        (2, '飲食'),
-        (3, '生病'),                
-        (4, '配對'),
-        (5, '認養'),
-        (6, '其他')
+        (2, '寵物飲食'),
+        (3, '寵物生病'),                        
+        (4, '其他')
     )    
 
     topic = models.IntegerField(choices = TOPIC_CHOICES, verbose_name = "主題")    
     title = models.CharField(max_length = 50, verbose_name = "標題")
     content = models.TextField(verbose_name = "留言內容")
-    pet = models.ForeignKey(Pets, verbose_name = "該紀錄的寵物")
+    pet = models.ForeignKey(Pets, on_delete = models.DO_NOTHING, verbose_name = "該紀錄的寵物")
 
     class Meta:
+        verbose_name_plural = "留言板"        
         db_table = '留言板'
