@@ -1,4 +1,3 @@
-from pydoc_data.topics import topics
 import random
 from faker import Faker
 from datetime import date
@@ -44,11 +43,11 @@ def nickname_generator():
 # 獲得隨機的host_id
 def get_random_host_id():
 
-    max_id = Hosts.objects.all().values_list("id", flat=True)
+    all_id = Hosts.objects.all().values_list("id", flat=True)
 
-    get_id = random.randint(1, max_id)
+    index = random.randint(0, all_id.count() - 1)
 
-    return get_id
+    return all_id[index]
 
 # 開始時間
 def get_start_date():    
@@ -83,11 +82,6 @@ def get_random_pet():
     return Pets.objects.get(id = get_id)
 
 
-all_id = Hosts.objects.all().values_list("id", flat=True)
-
-print(all_id)
-
-
 # # 產生主人假資料
 # for i in range(10):
 #     Hosts.objects.create(
@@ -101,40 +95,38 @@ print(all_id)
 
 
 # 產生寵物假資料
-# for i in range(2):
+for i in range(2):
 
-#     Pets.objects.create(
-#         name = faker2.name(),
-#         nickname = nickname_generator(),        
-#         category = random.randint(1, 7),
-#         type = faker.country(),
-#         gender = random.randint(1, 2),
-#         birth_date = faker.date(),                                                                
-#         host_id = get_random_host_id()
-#     )
+    Pets.objects.create(
+        name = faker2.name(),
+        nickname = nickname_generator(),        
+        category = random.randint(1, 7),
+        type = faker.country(),
+        gender = random.randint(1, 2),
+        birth_date = faker.date(),                                                                
+        host_id = get_random_host_id()
+    )
 
 # 產生協助飼養者假資料
-# for i in range(2):
-           
+for i in range(2):           
 
-# assistant = Assistants.objects.create(
-#     first_name = faker.first_name(),
-#     last_name = faker.last_name(),
-#     birth_date = faker.date(),        
-#     email = faker.email(),
-#     start_time = get_start_date(),
-#     end_time = get_end_date(),
-#     phonenumber = faker.phone_number(),
-#     address = faker.address(),
-# )
+    assistant = Assistants.objects.create(
+        first_name = faker.first_name(),
+        last_name = faker.last_name(),
+        birth_date = faker.date(),        
+        email = faker.email(),
+        start_time = get_start_date(),
+        end_time = get_end_date(),
+        phonenumber = faker.phone_number(),
+        address = faker.address(),
+    )
 
-# # 這兩個都可以
-# pet = get_random_pet()
-# pet_id = get_random_pet_id()
+# 這兩個都可以
+pet = get_random_pet()
+pet_id = get_random_pet_id()
 
-# assistant.pet.add(pet_id)
-# assistant.pet.set([pet])
-
+assistant.pet.add(pet_id)
+assistant.pet.set([pet])
 
 #assistant.pet.add(get_random_pet())
 

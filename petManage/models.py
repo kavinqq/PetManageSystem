@@ -1,14 +1,17 @@
 import datetime
-from django.db import models
 
-class Hosts(models.Model):
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+class Hosts(AbstractUser):
     '''
     主人資料表
     '''
-
+    
     first_name = models.CharField(max_length = 12, verbose_name = "名字")    
     last_name = models.CharField(max_length = 8, verbose_name = "姓氏")
-    birth_date = models.DateField(verbose_name = "出生年月日")
+    birth_date = models.DateField(blank = True, null = True, verbose_name = "出生年月日")
     email = models.EmailField(max_length = 255, verbose_name = "電子信箱")
     phonenumber = models.CharField(max_length = 10, verbose_name = "聯絡號碼")
     address = models.CharField(max_length = 80, verbose_name = "地址")
@@ -31,13 +34,14 @@ class Pets(models.Model):
 
     # 種類選項
     CATEGORY_CHOICES = (
-        (1, 'Dog'),
-        (2, 'Cat'),
-        (3, 'Snake'),
-        (4, 'Spider'),
-        (5, 'Fog'),
-        (6, 'Duck'),
-        (7, 'Chicken')    
+        (1, '狗'),
+        (2, '貓'),
+        (3, '蛇'),
+        (4, '蜘蛛'),
+        (5, '青蛙'),
+        (6, '老鼠'),
+        (7, '鳥類'),
+        (8, '其他')
     )    
     
     name = models.CharField(max_length = 20, verbose_name = "姓名")
@@ -76,11 +80,13 @@ class PetRecords(models.Model):
     number_of_meals = models.IntegerField(null = True, blank = True, verbose_name = "當日用餐次數")
     weight = models.IntegerField(null = True, blank= True, verbose_name = "寵物體重")
     status = models.IntegerField(choices = STATUS_CHOICES, verbose_name = "身體狀況")            
+    photos = models.ImageField(upload_to = "%Y/%m/%d/", verbose_name = "日常照")
     
     hospital_name = models.CharField(max_length = 22, blank = True, verbose_name = "醫院/診所的名稱")    
     diseases = models.CharField(max_length = 255, blank = True, verbose_name = "症狀或病名")
     heal_status = models.IntegerField(choices = HEAL_STATUS_CHOICES, blank = True, null = True, verbose_name = "治療後狀況")
     notes = models.TextField(blank = True, verbose_name = "備註:")  
+
 
     pet = models.ForeignKey(Pets, on_delete = models.CASCADE, verbose_name = "該紀錄寵物")
     
