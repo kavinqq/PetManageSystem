@@ -3,7 +3,7 @@ from enum import Enum
 class CodeNMsgEnum(Enum):
 
     HOST_SIGN_UP_SUCCESS = (10, "註冊成功")
-    HOST_SIGN_UP_FAIL = (11, "註冊失敗")
+    HOST_SIGN_UP_FAIL = (11, "註冊失敗")    
 
     PET_ADD_SUCCESS = (20, "新增寵物資料成功!")
     PET_ADD_FAIL = (21, "新增寵物資料失敗!")

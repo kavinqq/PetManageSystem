@@ -61,7 +61,7 @@ class AddPet(GenericAPIView):
 def pet_category_info(self):
     '''
     回傳一個可供選擇的寵物類別的字典
-    '''
+    '''    
     pet_choice_list = Pets.category.field.choices
 
     result = dict(pet_choice_list)    

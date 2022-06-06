@@ -83,15 +83,16 @@ def get_random_pet():
 
 
 # # 產生主人假資料
-# for i in range(10):
-#     Hosts.objects.create(
-#         first_name = faker.first_name(),
-#         last_name = faker.last_name(),
-#         birth_date = faker.date(),
-#         email = faker.email(),
-#         phonenumber = faker.phone_number(),
-#         address = faker.address()
-#     )
+for i in range(10):
+    Hosts.objects.create(
+        username = faker2.name(),
+        first_name = faker.first_name(),
+        last_name = faker.last_name(),
+        birth_date = faker.date(),
+        email = faker.email(),
+        phonenumber = faker.phone_number(),
+        address = faker.address()
+    )
 
 
 # 產生寵物假資料
@@ -122,24 +123,22 @@ for i in range(2):
     )
 
 # 這兩個都可以
-pet = get_random_pet()
 pet_id = get_random_pet_id()
 
 assistant.pet.add(pet_id)
-assistant.pet.set([pet])
 
 #assistant.pet.add(get_random_pet())
 
 
-# # 產生留言板假資料
-# for i in range(2):
-#     MessageBoard.objects.create(
-#         topic = random.randint(1, 4),
-#         title = faker.text(max_nb_chars = 6, ext_word_list = ['飲食', '可愛', '散步', '寵物衣服']),
-#         content = faker.text(max_nb_chars = 100),        
+# 產生留言板假資料
+for i in range(2):
+    MessageBoard.objects.create(
+        topic = random.randint(1, 4),
+        title = faker.text(max_nb_chars = 6, ext_word_list = ['飲食', '可愛', '散步', '寵物衣服']),
+        content = faker.text(max_nb_chars = 100),        
         
-#         pet_id = get_random_pet_id()
-#     )
+        pet_id = get_random_pet_id()
+    )
 
 
 
