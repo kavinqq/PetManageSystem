@@ -105,7 +105,6 @@ class PetRecords(models.Model):
     heal_status = models.IntegerField(choices = HEAL_STATUS_CHOICES, blank = True, null = True, verbose_name = "治療後狀況")
     notes = models.TextField(blank = True, verbose_name = "備註:")  
 
-
     pet = models.ForeignKey(Pets, on_delete = models.CASCADE, verbose_name = "該紀錄寵物")
     
     class Meta:        
