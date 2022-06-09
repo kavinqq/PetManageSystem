@@ -4,9 +4,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class Hosts(AbstractUser):
+class Members(AbstractUser):
     '''
-    主人資料表
+    會員資料表
     '''
     
     username = models.CharField(max_length = 150, unique = True)
@@ -19,8 +19,8 @@ class Hosts(AbstractUser):
     
 
     class Meta:
-        verbose_name_plural = "寵物主人"        
-        db_table = '主人資料'
+        verbose_name_plural = "會員"        
+        db_table = '會員'
 
 
 class Pets(models.Model):
@@ -53,8 +53,8 @@ class Pets(models.Model):
     gender = models.IntegerField(choices = GENDER_CHOICES, verbose_name = "性別")
     birth_date = models.DateField(verbose_name = "出生年月日")        
 
-    host = models.ForeignKey(Hosts, on_delete = models.CASCADE, verbose_name = "主人", related_name = 'my_host')
-    assistants = models.ManyToManyField(Hosts, through = "pet_and_assistants", through_fields = ('pet', 'assistant'), on_delete = models.CASCADE, verbose_name = "協助飼養者", related_name = 'my_assistants')
+    host = models.ForeignKey(Members, on_delete = models.CASCADE, verbose_name = "主人", related_name = 'my_host')
+    assistants = models.ManyToManyField(Members, through = "pet_and_assistants", through_fields = ('pet', 'assistant'), verbose_name = "協助飼養者", related_name = 'my_assistants')
 
     class Meta:
         verbose_name_plural = "寵物"        
@@ -67,7 +67,7 @@ class pet_and_assistants(models.Model):
     '''
 
     pet = models.ForeignKey(Pets, on_delete = models.CASCADE, verbose_name = "寵物")    
-    assistant = models.ForeignKey(Hosts, on_delete = models.CASCADE,verbose_name = "協助飼養者")    
+    assistant = models.ForeignKey(Members, on_delete = models.CASCADE,verbose_name = "協助飼養者")    
     start_date = models.DateField(verbose_name = "開始協助日期")
     end_date = models.DateField(verbose_name = "結束協助日期")
 
@@ -111,27 +111,6 @@ class PetRecords(models.Model):
         verbose_name_plural = "寵物紀錄"        
         db_table = '寵物紀錄'
         unique_together = ("date", "pet")
-
-
-# class Assistants(models.Model):
-#     '''
-#     協助飼養者
-#     '''
-    
-#     first_name = models.CharField(max_length = 12, verbose_name = "名字")    
-#     last_name = models.CharField(max_length = 8, verbose_name = "姓氏")
-#     birth_date = models.DateField(verbose_name = "出生年月日")
-#     email = models.EmailField(max_length = 255, verbose_name = "電子信箱")
-#     phonenumber = models.CharField(max_length = 10, verbose_name = "聯絡號碼")
-#     start_time = models.DateField(verbose_name = "開始日期")
-#     end_time = models.DateField(verbose_name = "結束日期")
-#     address = models.CharField(max_length = 80, verbose_name = "地址")
-
-#     pet = models.ManyToManyField(Pets)
-
-#     class Meta:
-#         verbose_name_plural = "協助飼養寵物者"        
-#         db_table = '協助飼養寵物者'
 
 
 class MessageBoard(models.Model):

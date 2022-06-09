@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from petManage.models import *
 
-class HostSignUpSerializer(serializers.ModelSerializer):
+class MembersSignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Hosts
+        model = Members
         fields = ('username', 'first_name', 'last_name', 'password','birth_date', 'email', 'phonenumber', 'address')
 
 

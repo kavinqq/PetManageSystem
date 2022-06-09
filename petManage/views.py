@@ -8,13 +8,13 @@ from petManage.serializers import *
 from petManage.models import *
 from enums.CodeNMsgEnum import *
 
-class HostSignUpView(GenericAPIView):
+class MemberSignUpView(GenericAPIView):
     '''
     主人註冊表
     '''
 
-    queryset = Hosts.objects.all()
-    serializer_class = HostSignUpSerializer
+    queryset = Members.objects.all()
+    serializer_class = MembersSignUpSerializer
 
     def post(self, request):
 
@@ -22,7 +22,7 @@ class HostSignUpView(GenericAPIView):
         serializers = self.serializer_class(data = data)
 
         if serializers.is_valid():
-            Hosts.objects.create_user(**serializers.validated_data)
+            Members.objects.create_user(**serializers.validated_data)
 
             return Response(CodeNMsgEnum.HOST_SIGN_UP_SUCCESS.get_dict())
         else:
@@ -67,3 +67,5 @@ def pet_category_info(self):
     result = dict(pet_choice_list)    
 
     return HttpResponse(json.dumps(result, ensure_ascii=False), content_type="application/json")
+
+
