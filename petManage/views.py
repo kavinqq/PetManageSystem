@@ -1,12 +1,15 @@
 import json
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from petManage.forms import TestForm
 from petManage.serializers import *
 from petManage.models import *
 from enums.CodeNMsgEnum import *
+from petManage.forms import *
 
 class MemberSignUpView(GenericAPIView):
     '''
@@ -69,3 +72,35 @@ def pet_category_info(self):
     return HttpResponse(json.dumps(result, ensure_ascii=False), content_type="application/json")
 
 
+
+def test_form(request):
+
+    if request.method == 'POST':
+        form = TestForm(request.POST)
+        
+        if form.is_valid():
+
+            return HttpResponse('Correct!')
+
+    else:
+        form = TestForm()
+
+        context = {'form': form, 'str': "string"}
+
+        
+
+    return render(request, 'test1.html', context) 
+
+
+# template流程練習
+def test_template(request):
+
+    test_dict4 = dict(
+        test_dict = {'a' : 1, 'b' : 2, 'c' : 3, 'd' : 4, 'e' : 5},
+
+        test_dict2 = {'a' : 2, 'b' : 3, 'c' : 4, 'd' : 5, 'e' : 6},
+
+        test_dict3 = {'a' : 1, 'b' : 2, 'c' : 3, 'd' : 4, 'e' : 5}
+    )
+
+    return render(request, 'test2.html', {"dics": test_dict4})

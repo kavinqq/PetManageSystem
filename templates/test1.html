@@ -1,0 +1,6 @@
+<form action = "{% url 'test' %}" method = "post">
+    {% csrf_token %}
+    {{ form }}
+    <br> str is {{ str }}
+    <input type = "submit" value = "Submit">
+</form>

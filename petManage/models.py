@@ -80,12 +80,6 @@ class PetRecords(models.Model):
     '''
     寵物日常紀錄表
     '''
-    # 身體狀況
-    STATUS_CHOICES = (
-        (1, '健康'),
-        (2, '不舒服'),        
-    )
-
     # 治療狀況
     HEAL_STATUS_CHOICES = (
         (1, '症狀改善'),
@@ -97,7 +91,7 @@ class PetRecords(models.Model):
     number_of_excretion =  models.IntegerField(null = True, blank = True, verbose_name = "當日排泄次數")
     number_of_meals = models.IntegerField(null = True, blank = True, verbose_name = "當日用餐次數")
     weight = models.IntegerField(null = True, blank= True, verbose_name = "寵物體重")
-    status = models.IntegerField(choices = STATUS_CHOICES, verbose_name = "身體狀況")            
+    status = models.IntegerField(choices = HEAL_STATUS_CHOICES, verbose_name = "身體狀況")            
     photos = models.ImageField(upload_to = "%Y/%m/%d/", verbose_name = "日常照")
     
     hospital_name = models.CharField(max_length = 22, blank = True, verbose_name = "醫院/診所的名稱")    

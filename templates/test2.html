@@ -1,0 +1,10 @@
+{% for key, value in dics.items %}
+<div>
+this is {{key}} value is {{value}} <br>
+<div>
+    {% for key2, value2 in value.items %}
+    ---->> {{key2}} ==> {{value2}} <br>
+    {% endfor %}
+</div>
+</div>
+{% endfor %}
